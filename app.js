@@ -1,6 +1,7 @@
 const express=require('express');
 const connectToDatabase = require('./database/dbindex');
 const Book = require('./model/bookModel');
+const register = require('./model/registerModel');
 const app=express()
 connectToDatabase();
 
@@ -63,12 +64,33 @@ try {
             // data:book
       })
 }
-      
-      
-      
-           
-      
-
-     
-
 })
+
+app.delete('/book/:id', async function(req,res){
+const {id}=req.params
+await Book.findByIdAndDelete(id)
+
+res.status(200).json({
+      message:" Book deleted Successfully", 
+                        }) 
+                                                })
+
+app.patch('/book/:id',async function(req,res)
+{
+const {id}=req.params //which book to update?
+const {bookName,bookPrice,isbnNumber,authorName,publishedAt,publication}=req.body //Which content to update?
+
+await Book.findByIdAndUpdate(id,{
+      bookName,
+      bookPrice,
+      isbnNumber,
+      authorName,
+      publishedAt,
+      publication,
+})
+
+res.status(200).json({
+      message:" Book updated Successfully",
+})
+})
+
