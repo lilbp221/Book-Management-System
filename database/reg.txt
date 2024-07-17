@@ -1,0 +1,36 @@
+
+//create API for register
+
+app.post('/register',function(req,res){
+      const {userName,userPassword,userEmail}=req.body //took data from frontend
+
+      register.create({ //stored data at the table login 
+            userName,
+            userPassword,
+            userEmail,
+      })
+
+      res.status(200).json({
+            message:"user registered successfully"
+      })
+})
+
+app.get('/register', async function(req,res){
+      const users= await register.find()
+
+      res.status(200).json({
+            message:"user fetched successfully",
+            data:users
+      })
+})
+
+app.get('/register/:id',async function(req,res){
+const {id}=req.params
+      const user= await register.findById(id)
+
+      res.status(200).json({
+            message:"single user fetched successfully",
+            data:user
+      })
+
+})
