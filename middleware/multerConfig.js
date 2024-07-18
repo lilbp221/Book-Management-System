@@ -1,14 +1,19 @@
-// Import the multer package, which is used for handling file uploads in Node.js.
-const multer = require('multer');
+const multer = require('multer');   // Import the multer package, which is used for handling file uploads in Node.js.
 
 // Define a storage configuration for multer, specifying where and how to store the uploaded files.
 const storage = multer.diskStorage({
     // The destination function sets the directory where the uploaded files will be stored.
+     // 'cb' is a callback function that takes two arguments: error and success.
+
     destination: function(req, file, cb) {
-        // 'cb' is a callback function that takes two arguments: error and success.
-        // The first argument is 'null' indicating there is no error.
-        // The second argument is the path to the storage directory ('./storage').
-        cb(null, './storage');
+        
+       const allowedFileTypes=['image/png','image/jpeg','image/jpg']
+     
+       if(!allowedFileTypes.includes(file.mimetype)){       //if not allwed files given
+            cb(new Error('Invalid file type'))  //cb(error)
+       }
+    //   else
+        cb(null, './storage');  //cb(error,success)
     },
     // The filename function sets the name of the uploaded file.
     filename: function(req, file, cb) {
