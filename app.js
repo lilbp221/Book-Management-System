@@ -83,8 +83,16 @@ app.get("/book/:id", async function (req, res) {
 
 
 //API FOR DETETING BOOKS
-app.delete("/book/:id", async function (req, res) {
+app.delete("/book/:id", upload.single("image"), async function (req, res) {
   const { id } = req.params;
+  const oldDatas=await Book.findById(id);
+  const oldimagePath=oldDatas.imageUrl; ///http://localhost:3300/1721238392236_Screenshot
+  const localHostUrlLenght= "http://localhost:3300".length //lenth=21
+  const newoldimagePath= oldimagePath.slice(localHostUrlLenght) //1721238392236_Screenshot
+  fs.unlink('./storage/'+newoldimagePath, (err)=>{
+      if(err){console.log(err);}
+      else{console.log("image deleted successfully")}
+  } ) 
   await Book.findByIdAndDelete(id);
 
   res.status(200).json({
